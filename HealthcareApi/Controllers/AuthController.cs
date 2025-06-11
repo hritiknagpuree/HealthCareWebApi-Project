@@ -45,7 +45,6 @@ public class AuthController : ControllerBase
         if (await _patientRepo.PatientExists(dto.Username))
             return BadRequest("Username already taken");
 
-        // Create a new patient object from the DTO
         var patient = new Patient
         {
             FullName = dto.FullName,
