@@ -12,5 +12,14 @@ namespace HealthcareApi.Interfaces
 
         // Get all doctors as view models
         Task<IEnumerable<DoctorViewModel>> GetAllDoctors();
+
+        // Get doctor by ID (Guid)
+        Task<DoctorViewModel?> GetDoctorById(Guid id);
+
+        // Update doctor
+        Task<bool> UpdateDoctor(Guid id, DoctorUpdateDto dto);
+
+        // Delete doctor
+        Task<bool> DeleteDoctor(Guid id);
     }
 }

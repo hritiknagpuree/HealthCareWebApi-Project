@@ -1,4 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using HealthcareApi.Interfaces;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 // Handles Doctor data operations
 public class DoctorRepository : IDoctorRepository
@@ -35,5 +38,30 @@ public class DoctorRepository : IDoctorRepository
     public async Task<IEnumerable<Doctor>> GetAllDoctors()
     {
         return await _context.Doctors.ToListAsync();
+    }
+
+    // Get doctor by ID
+    public async Task<Doctor?> GetDoctorById(int id)
+    {
+        return await _context.Doctors.FindAsync(id);
+    }
+
+    // Update doctor
+    public async Task<bool> UpdateDoctor(Doctor doctor)
+    {
+        _context.Doctors.Update(doctor);
+        return await _context.SaveChangesAsync() > 0;
+    }
+
+    // Delete doctor
+    public async Task<bool> DeleteDoctor(Doctor doctor)
+    {
+        _context.Doctors.Remove(doctor);
+        return await _context.SaveChangesAsync() > 0;
+    }
+
+    public async Task<Doctor?> GetDoctorById(Guid id)
+    {
+        return await _context.Doctors.FindAsync(id);
     }
 }

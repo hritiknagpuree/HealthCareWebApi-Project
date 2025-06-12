@@ -4,6 +4,7 @@ public class Doctor
 {
     public Guid Id { get; set; }
 
+
     [Required, StringLength(100)]
     public string FullName { get; set; }
 

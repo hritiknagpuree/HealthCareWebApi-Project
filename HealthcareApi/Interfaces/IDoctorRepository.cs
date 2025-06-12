@@ -10,5 +10,14 @@
     Task<Doctor?> Login(string username, string password);
 
     // Get all doctors
-    Task<IEnumerable<Doctor>> GetAllDoctors(); // Must return Doctor type
+    Task<IEnumerable<Doctor>> GetAllDoctors();
+
+    // Get doctor by Guid ID
+    Task<Doctor?> GetDoctorById(Guid id);
+
+    // Update doctor
+    Task<bool> UpdateDoctor(Doctor doctor);
+
+    // Delete doctor
+    Task<bool> DeleteDoctor(Doctor doctor);
 }
