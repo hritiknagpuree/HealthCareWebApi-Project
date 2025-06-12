@@ -5,17 +5,17 @@ namespace HealthcareApi.Services
 {
     public class DoctorService : IDoctorService
     {
-        private readonly IDoctorRepository _repo;
+        private readonly IDoctorRepository _doctorRepo;
 
         public DoctorService(IDoctorRepository repo)
         {
-            _repo = repo;
+            _doctorRepo = repo;
         }
 
         // Register new doctor
         public async Task<string> RegisterDoctor(DoctorRegisterDto dto)
         {
-            if (await _repo.DoctorExists(dto.Username))
+            if (await _doctorRepo.DoctorExists(dto.Username))
                 return "Doctor username already exists.";
 
             var doctor = new Doctor
@@ -24,17 +24,17 @@ namespace HealthcareApi.Services
                 FullName = dto.FullName,
                 Specialty = dto.Specialty,
                 Username = dto.Username,
-                Password = dto.Password // Note: hash in production
+                Password = dto.Password 
             };
 
-            await _repo.Register(doctor);
+            await _doctorRepo.Register(doctor);
             return "Doctor registered successfully.";
         }
 
         // Login doctor
         public async Task<string> LoginDoctor(LoginDto dto)
         {
-            var doctor = await _repo.Login(dto.Username, dto.Password);
+            var doctor = await _doctorRepo.Login(dto.Username, dto.Password);
 
             if (doctor != null)
             {
@@ -48,7 +48,7 @@ namespace HealthcareApi.Services
         // Get all doctors
         public async Task<IEnumerable<DoctorViewModel>> GetAllDoctors()
         {
-            var doctors = await _repo.GetAllDoctors();
+            var doctors = await _doctorRepo.GetAllDoctors();
 
             return doctors.Select(d => new DoctorViewModel
             {
@@ -61,7 +61,7 @@ namespace HealthcareApi.Services
         // Get doctor by ID
         public async Task<DoctorViewModel?> GetDoctorById(Guid id)
         {
-            var doctor = await _repo.GetDoctorById(id);
+            var doctor = await _doctorRepo.GetDoctorById(id);
             if (doctor == null) return null;
 
             return new DoctorViewModel
@@ -75,23 +75,23 @@ namespace HealthcareApi.Services
         // Update doctor
         public async Task<bool> UpdateDoctor(Guid id, DoctorUpdateDto dto)
         {
-            var doctor = await _repo.GetDoctorById(id);
+            var doctor = await _doctorRepo.GetDoctorById(id);
             if (doctor == null) return false;
 
             doctor.FullName = dto.FullName;
             doctor.Specialty = dto.Specialty;
-            doctor.Password = dto.Password; // Optional
+            doctor.Password = dto.Password; 
 
-            return await _repo.UpdateDoctor(doctor);
+            return await _doctorRepo.UpdateDoctor(doctor);
         }
 
         // Delete doctor
         public async Task<bool> DeleteDoctor(Guid id)
         {
-            var doctor = await _repo.GetDoctorById(id);
+            var doctor = await _doctorRepo.GetDoctorById(id);
             if (doctor == null) return false;
 
-            return await _repo.DeleteDoctor(doctor);
+            return await _doctorRepo.DeleteDoctor(doctor);
         }
     }
 }

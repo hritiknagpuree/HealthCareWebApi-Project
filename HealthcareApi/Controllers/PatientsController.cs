@@ -10,7 +10,6 @@ namespace HealthcareApi.Controllers
     public class PatientsController : ControllerBase
     {
         private readonly IPatientService _patientService;
-       
 
         public PatientsController(IPatientService patientService)
         {
@@ -56,7 +55,23 @@ namespace HealthcareApi.Controllers
             }
         }
 
-      
+        //// POST: api/patients
+        //[HttpPost]
+        //public async Task<IActionResult> Register([FromBody] PatientRegisterDto dto)
+        //{
+        //    try
+        //    {
+        //        if (!ModelState.IsValid)
+        //            return BadRequest(ModelState);
+
+        //        var result = await _patientService.RegisterPatient(dto);
+        //        return Ok(result);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, $"Error: {ex.Message}");
+        //    }
+        //}
 
         // PUT: api/patients/{id}
         [HttpPut("{id:guid}")]

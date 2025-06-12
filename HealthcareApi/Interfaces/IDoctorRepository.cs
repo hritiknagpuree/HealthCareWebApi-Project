@@ -20,4 +20,5 @@
 
     // Delete doctor
     Task<bool> DeleteDoctor(Doctor doctor);
+    //Task<Doctor> GetByUsername(string username);
 }

@@ -10,7 +10,6 @@ namespace HealthcareApi.Services
     {
         private readonly IPatientRepository _repo;
 
-        // Inject the patient repository
         public PatientService(IPatientRepository repo)
         {
             _repo = repo;
@@ -27,7 +26,7 @@ namespace HealthcareApi.Services
                 FullName = dto.FullName,
                 Age = dto.Age,
                 Username = dto.Username,
-                Password = dto.Password // Note: use hashing in production
+                Password = dto.Password 
             };
 
             await _repo.Register(patient);
