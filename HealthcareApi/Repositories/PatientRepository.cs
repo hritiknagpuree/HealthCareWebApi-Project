@@ -1,5 +1,8 @@
 ﻿using HealthcareApi.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace HealthcareApi.Repositories
 {
@@ -15,15 +18,14 @@ namespace HealthcareApi.Repositories
         }
 
         // Register new patient
-        public async Task<Patient> Register(Patient patient)
+        public async Task Register(Patient patient)
         {
             _context.Patients.Add(patient);
             await _context.SaveChangesAsync();
-            return patient;
         }
 
         // Patient login
-        public async Task<Patient> Login(string username, string password)
+        public async Task<Patient?> Login(string username, string password)
         {
             return await _context.Patients
                 .FirstOrDefaultAsync(p => p.Username == username && p.Password == password);
@@ -41,26 +43,41 @@ namespace HealthcareApi.Repositories
             return await _context.Patients.ToListAsync();
         }
 
-        // Interface implementation
-        Task IPatientRepository.Register(Patient patient)
+        // Add a new patient and return it
+        public async Task<Patient> AddPatient(Patient patient)
         {
-            return Register(patient);
-        }
-
-        // Not implemented
-        public Task AddPatient(Patient patient)
-        {
-            throw new NotImplementedException();
+            _context.Patients.Add(patient);
+            await _context.SaveChangesAsync();
+            return patient;
         }
 
         // Get patient by username
-        public async Task<Patient> GetByUsername(string username)
+        public async Task<Patient?> GetByUsername(string username)
         {
             return await _context.Patients.FirstOrDefaultAsync(p => p.Username == username);
         }
 
-        // Not implemented
-        Task<Patient> IPatientRepository.AddPatient(Patient patient)
+        // Get patient by ID
+        public async Task<Patient?> GetPatientById(Guid id)
+        {
+            return await _context.Patients.FindAsync(id);
+        }
+
+        // Update existing patient
+        public async Task<bool> UpdatePatient(Patient patient)
+        {
+            _context.Patients.Update(patient);
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        // Delete patient
+        public async Task<bool> DeletePatient(Patient patient)
+        {
+            _context.Patients.Remove(patient);
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public Task<Patient?> GetById(Guid id)
         {
             throw new NotImplementedException();
         }

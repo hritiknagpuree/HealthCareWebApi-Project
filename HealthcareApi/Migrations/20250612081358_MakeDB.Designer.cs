@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HealthcareApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250612051947_MakeDB")]
+    [Migration("20250612081358_MakeDB")]
     partial class MakeDB
     {
         /// <inheritdoc />
@@ -57,11 +57,9 @@ namespace HealthcareApi.Migrations
 
             modelBuilder.Entity("Patient", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Age")
                         .HasColumnType("int");

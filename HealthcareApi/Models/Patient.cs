@@ -2,8 +2,7 @@
 
 public class Patient
 {
-    public int Id { get; set; }
-
+    public Guid Id { get; set; }
     [Required, StringLength(100)]
     public string FullName { get; set; }
 

@@ -1,17 +1,12 @@
-﻿using HealthcareApi.ViewModels;
+﻿using HealthcareApi.DTOs;
+using HealthcareApi.ViewModels;
 
-namespace HealthcareApi.Interfaces
+public interface IPatientService
 {
-    // Patient service interface
-    public interface IPatientService
-    {
-        // Register new patient
-        Task<string> RegisterPatient(PatientRegisterDto dto);
-
-        // Patient login
-        Task<string> LoginPatient(LoginDto dto);
-
-        // Get all patients as view models
-        Task<IEnumerable<PatientViewModel>> GetAllPatients();
-    }
+    Task<string> RegisterPatient(PatientRegisterDto dto);
+    Task<string> LoginPatient(LoginDto dto);
+    Task<IEnumerable<PatientViewModel>> GetAllPatients();
+    Task<PatientViewModel?> GetPatientById(Guid id);
+    Task<bool> UpdatePatient(Guid id, PatientUpdateDto dto);
+    Task<bool> DeletePatient(Guid id);
 }
