@@ -1,84 +1,86 @@
 ﻿using HealthcareApi.Interfaces;
+using HealthcareApi.Services;
+using HealthcareApi.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
-    private readonly IDoctorRepository _doctorRepo;
-    private readonly IPatientRepository _patientRepo;
+    private readonly IAuthService _authService;
 
-    // Constructor injection for doctor and patient repositories
-    public AuthController(IDoctorRepository doctorRepo, IPatientRepository patientRepo)
+    public AuthController(IAuthService authService)
     {
-        _doctorRepo = doctorRepo;
-        _patientRepo = patientRepo;
+        _authService = authService; // Inject auth service
     }
 
-    // Register a new doctor
     [HttpPost("register-doctor")]
     public async Task<IActionResult> RegisterDoctor(DoctorRegisterDto dto)
     {
-        // Check if the username already exists
-        if (await _doctorRepo.DoctorExists(dto.Username))
-            return BadRequest("Username already taken");
-
-        // Create a new doctor object from the DTO
-        var doctor = new Doctor
+        try
         {
-            FullName = dto.FullName,
-            Specialty = dto.Specialty,
-            Username = dto.Username,
-            Password = dto.Password
-        };
+            var result = await _authService.RegisterDoctor(dto); // Register doctor
+            if (result != "Success")
+                return BadRequest(result); // Return error if registration fails
 
-        // Save the doctor to the database
-        await _doctorRepo.Register(doctor);
-        return Ok("Doctor registered successfully.");
+            return Ok("Doctor registered successfully."); 
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"An error occurred: {ex.Message}"); // Handle unexpected error
+        }
     }
 
-    // Register a new patient
     [HttpPost("register-patient")]
     public async Task<IActionResult> RegisterPatient(PatientRegisterDto dto)
     {
-        // Check if the username already exists
-        if (await _patientRepo.PatientExists(dto.Username))
-            return BadRequest("Username already taken");
-
-        var patient = new Patient
+        try
         {
-            FullName = dto.FullName,
-            Age = dto.Age,
-            Username = dto.Username,
-            Password = dto.Password
-        };
+            var result = await _authService.RegisterPatient(dto); // Register patient
+            if (result != "Success")
+                return BadRequest(result); // Return error if registration fails
 
-        // Save the patient to the database
-        await _patientRepo.Register(patient);
-        return Ok("Patient registered successfully.");
+            return Ok("Patient registered successfully."); // Return success response
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"An error occurred: {ex.Message}"); 
+        }
     }
 
-    // Login as a doctor
     [HttpPost("login-doctor")]
     public async Task<IActionResult> LoginDoctor(LoginDto dto)
     {
-        // Try to find doctor with given credentials
-        var user = await _doctorRepo.Login(dto.Username, dto.Password);
-        if (user == null)
-            return Unauthorized("Invalid doctor credentials");
+        try
+        {
+            var result = await _authService.LoginDoctor(dto); // Doctor login
+            if (result != "Success")
+                return Unauthorized(result); // Return unauthorized if login fails
 
-        return Ok("Doctor logged in.");
+            DoctorSession.IsDoctorLoggedIn = true; // Set doctor session
+            return Ok("Doctor logged in."); 
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"An error occurred: {ex.Message}"); 
+        }
     }
 
-    // Login as a patient
     [HttpPost("login-patient")]
     public async Task<IActionResult> LoginPatient(LoginDto dto)
     {
-        // Try to find patient with given credentials
-        var user = await _patientRepo.Login(dto.Username, dto.Password);
-        if (user == null)
-            return Unauthorized("Invalid patient credentials");
+        try
+        {
+            var result = await _authService.LoginPatient(dto); // Patient login
+            if (result != "Success")
+                return Unauthorized(result); 
 
-        return Ok("Patient logged in.");
+            PatientSession.IsPatientLoggedIn = true; // Set patient session
+            return Ok("Patient logged in."); 
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"An error occurred: {ex.Message}");
+        }
     }
 }

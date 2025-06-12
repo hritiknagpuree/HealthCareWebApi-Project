@@ -15,6 +15,9 @@ public class DoctorsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
+        if (!DoctorSession.IsDoctorLoggedIn)
+            return Unauthorized("Doctor not logged in");
+
         var doctors = await _service.GetAllDoctors();
         return Ok(doctors);
     }

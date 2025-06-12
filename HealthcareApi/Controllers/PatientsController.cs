@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using HealthcareApi.Interfaces;
+﻿using HealthcareApi.Interfaces;
+using HealthcareApi.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HealthcareApi.Controllers
 {
@@ -17,6 +18,9 @@ namespace HealthcareApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
+            if (!PatientSession.IsPatientLoggedIn)
+                return Unauthorized("Patient not logged in");
+
             var patients = await _patientRepo.GetAllPatients();
             return Ok(patients);
         }

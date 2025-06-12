@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HealthcareApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250611105913_MakeDatabaseFirst")]
-    partial class MakeDatabaseFirst
+    [Migration("20250612051947_MakeDB")]
+    partial class MakeDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

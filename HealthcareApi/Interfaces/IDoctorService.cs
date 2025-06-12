@@ -2,7 +2,6 @@
 
 namespace HealthcareApi.Interfaces
 {
-    // Doctor service interface
     public interface IDoctorService
     {
         // Register new doctor
